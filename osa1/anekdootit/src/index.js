@@ -1,31 +1,53 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const App = (props) => {
+const App = ({anecdotes}) => {
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState([0, 0, 0, 0, 0, 0])
 
   const nextAnecdote = () => {
-    const min = 0
-    const max = anecdotes.length
-    const randomInt = Math.floor(Math.random() * (max - min)) + min
-    setSelected(randomInt)
+    const indeksi = Math.floor(Math.random() * anecdotes.length)
+    setSelected(indeksi)
   }
 
   const vote = () => {
-    const copy = [...points]
-    copy[selected] += 1
-    setPoints(copy)
+    const copy = [...points] 
+    let newVotes = copy[selected] + 1 
+    copy[selected] = newVotes 
+    setPoints(copy) 
   }
 
   return (
     <div>
-      {props.anecdotes[selected]}
+      <h1>Anecdote of the day</h1>
+      <p>{anecdotes[selected]}</p>
       <p>has {points[selected]} votes</p>
       <div>
         <Button handleClick={vote} text="vote" />
         <Button handleClick={nextAnecdote} text="next anecdote" />
+        <EnitenAanestetty anecdotes={anecdotes} points={points} />
+      </div>      
+    </div>
+  )
+}
+
+const EnitenAanestetty = ({anecdotes, points}) => {
+
+  const suurin = Math.max(...points)
+
+  if (suurin === 0) {
+    return (
+      <div>
+      <h1>Anecdote with most votes</h1>
+      <p>No votes yet</p>
       </div>
+    )
+  }
+  return (
+    <div>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[points.indexOf(suurin)]}</p>
+      <p>has {points[points.indexOf(suurin)]} votes</p>
     </div>
   )
 }
