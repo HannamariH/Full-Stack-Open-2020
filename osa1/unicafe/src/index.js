@@ -67,19 +67,47 @@ const Statistics = ({ good, neutral, bad, all, average, positive }) => {
   return (
     <div>
       <h1>statistics</h1>
-      <StatisticLine text="good" value={good} />
-      <StatisticLine text="neutral" value ={neutral} />
-      <StatisticLine text="bad" value ={bad} />
-      <StatisticLine text="all" value ={all} />
-      <StatisticLine text="average" value ={average} />
-      <StatisticLine text="positive" value ={positive} />
+      <table>
+        <tbody>
+          <tr>
+            <td><StatisticHeader text="good" /></td>
+            <td><StatisticValue value={good} /></td>
+          </tr>
+          <tr>
+            <td><StatisticHeader text="neutral" /></td>
+            <td><StatisticValue value={neutral} /></td>
+          </tr>
+          <tr>
+            <td><StatisticHeader text="bad" /></td>
+            <td><StatisticValue value={bad} /></td>
+          </tr>
+          <tr>
+            <td><StatisticHeader text="all" /></td>
+            <td><StatisticValue value={all} /></td>
+          </tr>
+          <tr>
+            <td><StatisticHeader text="average" /></td>
+            <td><StatisticValue value={average} /></td>
+          </tr>
+          <tr>
+            <td><StatisticHeader text="positive" /></td>
+            <td><StatisticValue value={positive} /></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   )
 }
 
-const StatisticLine = ({text, value}) => {
+const StatisticHeader = ({ text }) => {
   return (
-    <p>{text} {value}</p>
+    <p>{text}</p>
+  )
+}
+
+const StatisticValue = ({ value }) => {
+  return (
+    <p>{value}</p>
   )
 }
 
