@@ -16,9 +16,9 @@ const App = () => {
     setGood(newGood)
     let newAll = all + 1
     setAll(all + 1)
-    let keskiarvo = (newGood - bad)/(newAll)
+    let keskiarvo = (newGood - bad) / (newAll)
     setAverage(keskiarvo)
-    let positiiviset = (newGood/newAll)
+    let positiiviset = ((newGood / newAll * 100) + " %")
     setPositive(positiiviset)
   }
 
@@ -27,9 +27,9 @@ const App = () => {
     setNeutral(newNeutral)
     let newAll = all + 1
     setAll(all + 1)
-    let keskiarvo = (good - bad)/(newAll)
+    let keskiarvo = (good - bad) / (newAll)
     setAverage(keskiarvo)
-    let positiiviset = (good/newAll)
+    let positiiviset = ((good / newAll * 100) + " %")
     setPositive(positiiviset)
   }
 
@@ -38,9 +38,9 @@ const App = () => {
     setBad(newBad)
     let newAll = all + 1
     setAll(all + 1)
-    let keskiarvo = (good - newBad)/(newAll)
+    let keskiarvo = (good - newBad) / (newAll)
     setAverage(keskiarvo)
-    let positiiviset = (good/newAll)
+    let positiiviset = ((good / newAll * 100) + " %")
     setPositive(positiiviset)
   }
 
@@ -50,12 +50,12 @@ const App = () => {
       <Button handleClick={goodClick} text="good" />
       <Button handleClick={neutralClick} text="neutral" />
       <Button handleClick={badClick} text="bad" />
-      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} positive={positive}/>
+      <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} positive={positive} />
     </div>
   )
 }
 
-const Statistics = ({good, neutral, bad, all, average, positive}) => {
+const Statistics = ({ good, neutral, bad, all, average, positive }) => {
   if (all === 0) {
     return (
       <div>
@@ -66,23 +66,29 @@ const Statistics = ({good, neutral, bad, all, average, positive}) => {
   }
   return (
     <div>
-    <h1>statistics</h1>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {all}</p>
-      <p>average {average}</p>
-      <p>positive {positive * 100} %</p>
-      </div>
+      <h1>statistics</h1>
+      <StatisticLine text="good" value={good} />
+      <StatisticLine text="neutral" value ={neutral} />
+      <StatisticLine text="bad" value ={bad} />
+      <StatisticLine text="all" value ={all} />
+      <StatisticLine text="average" value ={average} />
+      <StatisticLine text="positive" value ={positive} />
+    </div>
+  )
+}
+
+const StatisticLine = ({text, value}) => {
+  return (
+    <p>{text} {value}</p>
   )
 }
 
 const Button = (props) => (
   <button onClick={props.handleClick}>
-      {props.text}
+    {props.text}
   </button>
 )
 
-ReactDOM.render(<App />, 
+ReactDOM.render(<App />,
   document.getElementById('root')
 )
