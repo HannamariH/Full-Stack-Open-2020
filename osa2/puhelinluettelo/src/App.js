@@ -1,18 +1,22 @@
 import React, { useState } from "react"
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas" }
-  ])
+  const [persons, setPersons] = useState([{ name: "Arto Hellas" }])
   const [newName, setNewName] = useState("")
 
   const onSubmit = (event) => {
     event.preventDefault()
-    const personObject = {
-      name: newName
+    const onkoJo = persons.find(person => person.name === newName)
+    if (onkoJo !== undefined) {
+      alert(`${newName} is already added to phonebook`)
+      setNewName("")
+    } else {
+      const personObject = {
+        name: newName,
+      }
+      setPersons(persons.concat(personObject))
+      setNewName("")
     }
-    setPersons(persons.concat(personObject))
-    setNewName("")
   }
 
   const handleNameChange = (event) => {
