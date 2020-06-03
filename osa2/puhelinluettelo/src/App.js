@@ -38,6 +38,16 @@ const App = () => {
     }
   }
 
+  const deletePerson = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService
+        .deletePerson(person.id)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+    }
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -70,7 +80,7 @@ const App = () => {
         onSubmit={onSubmit}
       />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} deletePerson={deletePerson}/>
     </div>
   )
 }
@@ -105,10 +115,16 @@ const Persons = (props) => {
     <div>
       {props.personsToShow.map((person) => (
         <p key={person.name}>
-          {person.name} {person.number}
+          {person.name} {person.number} <Delete person={person} deletePerson={props.deletePerson}/>
         </p>
       ))}
     </div>
+  )
+}
+
+const Delete = (props) => {
+  return (
+    <button onClick={() => props.deletePerson(props.person)}>Delete</button>
   )
 }
 
