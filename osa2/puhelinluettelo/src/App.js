@@ -19,11 +19,27 @@ const App = () => {
   const onSubmit = (event) => {
     event.preventDefault()
     const onkoJo = persons.find((person) => person.name === newName)
+    //jos henkilö löytyy listalta
     if (onkoJo !== undefined) {
-      alert(`${newName} is already added to phonebook`)
-      setNewName("")
-      setNewNumber("")
-    } else {
+      //jos halutaan muokata olemassa olevan henkilön puhelinnumeroa
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const personObject = {
+          name: newName,
+          number: newNumber,
+        }
+        const id = persons.find(person => person.name === newName).id
+        personService
+          .update(id, personObject)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+            setNewName("")
+            setNewNumber("")
+          })      
+      } else { //jos ei haluta muokata olemassa olevaa
+        setNewName("")
+        setNewNumber("")
+      }      
+    } else { //jos henkilöä ei löydy, lisätään uutena
       const personObject = {
         name: newName,
         number: newNumber,
