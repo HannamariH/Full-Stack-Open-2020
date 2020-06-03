@@ -7,6 +7,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("")
   const [hakuehto, setHakuehto] = useState("")
   const [showAll, setShowAll] = useState(true)
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -34,6 +35,12 @@ const App = () => {
             setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
             setNewName("")
             setNewNumber("")
+            setMessage(
+              `Updated ${newName}`
+            )
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
           })      
       } else { //jos ei haluta muokata olemassa olevaa
         setNewName("")
@@ -50,6 +57,12 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName("")
         setNewNumber("")
+        setMessage(
+          `Created ${newName}`
+        )
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
         })
     }
   }
@@ -60,6 +73,12 @@ const App = () => {
         .deletePerson(person.id)
         .then(() => {
           setPersons(persons.filter(p => p.id !== person.id))
+          setMessage(
+            `Deleted ${person.name}`
+          )
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
     }
   }
@@ -86,6 +105,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter value={hakuehto} onChange={handleHakuehtoChange} />
       <h2>Add a new</h2>
       <New
@@ -141,6 +161,18 @@ const Persons = (props) => {
 const Delete = (props) => {
   return (
     <button onClick={() => props.deletePerson(props.person)}>Delete</button>
+  )
+}
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {message}
+    </div>
   )
 }
 
