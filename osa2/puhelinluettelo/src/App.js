@@ -11,11 +11,9 @@ const App = () => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    personService
-      .getAll()
-      .then(initialPersons => {
-        setPersons(initialPersons)
-      })
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons)
+    })
   }, [])
 
   const onSubmit = (event) => {
@@ -24,69 +22,71 @@ const App = () => {
     //jos henkilö löytyy listalta
     if (onkoJo !== undefined) {
       //jos halutaan muokata olemassa olevan henkilön puhelinnumeroa
-      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
         const personObject = {
           name: newName,
           number: newNumber,
         }
-        const id = persons.find(person => person.name === newName).id
+        const id = persons.find((person) => person.name === newName).id
         personService
           .update(id, personObject)
-          .then(returnedPerson => {
-            setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== id ? person : returnedPerson
+              )
+            )
             setNewName("")
             setNewNumber("")
-            setMessage(
-              `Updated ${newName}`
-            )
+            setMessage(`Updated ${newName}`)
             setTimeout(() => {
               setMessage(null)
             }, 5000)
-          })     
-          .catch(error => {
-            setError(`Information of ${newName} has already been removed from server`)
+          })
+          .catch((error) => {
+            setError(
+              `Information of ${newName} has already been removed from server`
+            )
             setTimeout(() => {
               setError(null)
             }, 5000)
-          }) 
-      } else { //jos ei haluta muokata olemassa olevaa
+          })
+      } else {
+        //jos ei haluta muokata olemassa olevaa
         setNewName("")
         setNewNumber("")
-      }      
-    } else { //jos henkilöä ei löydy, lisätään uutena
+      }
+    } else {
+      //jos henkilöä ei löydy, lisätään uutena
       const personObject = {
         name: newName,
         number: newNumber,
       }
-      personService
-        .create(personObject)
-        .then(returnedPerson => {
+      personService.create(personObject).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson))
         setNewName("")
         setNewNumber("")
-        setMessage(
-          `Created ${newName}`
-        )
+        setMessage(`Created ${newName}`)
         setTimeout(() => {
           setMessage(null)
         }, 5000)
-        })
+      })
     }
   }
 
   const deletePerson = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
-      personService
-        .deletePerson(person.id)
-        .then(() => {
-          setPersons(persons.filter(p => p.id !== person.id))
-          setMessage(
-            `Deleted ${person.name}`
-          )
-          setTimeout(() => {
-            setMessage(null)
-          }, 5000)
-        })
+      personService.deletePerson(person.id).then(() => {
+        setPersons(persons.filter((p) => p.id !== person.id))
+        setMessage(`Deleted ${person.name}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      })
     }
   }
 
@@ -112,8 +112,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
-      <Error error={error} />
+      <Notification message={message} error={error} />
       <Filter value={hakuehto} onChange={handleHakuehtoChange} />
       <h2>Add a new</h2>
       <New
@@ -124,7 +123,7 @@ const App = () => {
         onSubmit={onSubmit}
       />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} deletePerson={deletePerson}/>
+      <Persons personsToShow={personsToShow} deletePerson={deletePerson} />
     </div>
   )
 }
@@ -159,7 +158,8 @@ const Persons = (props) => {
     <div>
       {props.personsToShow.map((person) => (
         <p key={person.name}>
-          {person.name} {person.number} <Delete person={person} deletePerson={props.deletePerson}/>
+          {person.name} {person.number}{" "}
+          <Delete person={person} deletePerson={props.deletePerson} />
         </p>
       ))}
     </div>
@@ -172,28 +172,18 @@ const Delete = (props) => {
   )
 }
 
-const Notification = ({ message }) => {
-  if (message === null) {
+const Notification = ({ message, error }) => {
+  if (message === null && error == null) {
     return null
   }
 
-  return (
-    <div className="message">
-      {message}
-    </div>
-  )
-}
-
-const Error = ({ error }) => {
-  if (error === null) {
-    return null
+  if (message !== null) {
+    return <div className="message">{message}</div>
   }
 
-  return (
-    <div className="error">
-      {error}
-    </div>
-  )
+  if (error !== null) {
+    return <div className="error">{error}</div>
+  }
 }
 
 export default App
