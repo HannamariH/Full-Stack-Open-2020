@@ -8,6 +8,7 @@ const App = () => {
   const [hakuehto, setHakuehto] = useState("")
   const [showAll, setShowAll] = useState(true)
   const [message, setMessage] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     personService
@@ -41,7 +42,13 @@ const App = () => {
             setTimeout(() => {
               setMessage(null)
             }, 5000)
-          })      
+          })     
+          .catch(error => {
+            setError(`Information of ${newName} has already been removed from server`)
+            setTimeout(() => {
+              setError(null)
+            }, 5000)
+          }) 
       } else { //jos ei haluta muokata olemassa olevaa
         setNewName("")
         setNewNumber("")
@@ -106,6 +113,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification message={message} />
+      <Error error={error} />
       <Filter value={hakuehto} onChange={handleHakuehtoChange} />
       <h2>Add a new</h2>
       <New
@@ -170,8 +178,20 @@ const Notification = ({ message }) => {
   }
 
   return (
-    <div className="error">
+    <div className="message">
       {message}
+    </div>
+  )
+}
+
+const Error = ({ error }) => {
+  if (error === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {error}
     </div>
   )
 }
