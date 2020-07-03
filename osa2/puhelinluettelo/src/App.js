@@ -18,6 +18,21 @@ const App = () => {
 
   const onSubmit = (event) => {
     event.preventDefault()
+
+    if (!newName) {
+      setError("Name is missing")
+      setTimeout(() => {
+        setError(null)
+      }, 5000)
+      return
+    } else if (!newNumber) {
+      setError("Number is missing")
+      setTimeout(() => {
+        setError(null)
+      }, 5000)
+      return
+    }
+
     const onkoJo = persons.find((person) => person.name === newName)
     //jos henkilö löytyy listalta
     if (onkoJo !== undefined) {
@@ -48,6 +63,7 @@ const App = () => {
             }, 5000)
           })
           .catch((error) => {
+            console.log(error)
             setError(
               `Information of ${newName} has already been removed from server`
             )
