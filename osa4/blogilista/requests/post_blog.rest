@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Matkablogi",
-  "author": "Pekka",
-  "url": "www.matkablogi.fi",
-  "likes": "4"
+    "title": "Kakkublogi",
+    "author": "Lissu",
+    "url": "www.kakkublogi.fi",
+    "likes": "30"
 }

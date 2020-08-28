@@ -1,2 +1,13 @@
 # dependencies
 /node_modules
+
+.env
+
+../../muistilappu.txt
+../../osa0/osat01-03/
+../../osa1/kurssitiedot/.gitignore
+../../osa2/puhelinluettelo/src/services/jemma_persons.js
+../../part1/
+../../part1b/
+../../part2/
+
