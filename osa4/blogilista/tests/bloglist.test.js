@@ -7,8 +7,7 @@ test("dummy returns one", () => {
   expect(result).toBe(1)
 })
 
-describe("total likes", () => {
-  const listWithOneBlog = [
+const listWithOneBlog = [
     {
       _id: "5a422aa71b54a676234d17f8",
       title: "Go To Statement Considered Harmful",
@@ -76,6 +75,8 @@ describe("total likes", () => {
     },
   ]
 
+describe("total likes", () => {
+
   test("when list has only one blog equals the likes of that", () => {
     const result = listHelper.totalLikes(listWithOneBlog)
     expect(result).toBe(5)
@@ -91,3 +92,22 @@ describe("total likes", () => {
     expect(result).toBe(0)
   })
 })
+
+describe("most likes", () => {
+
+    test("with a longer list of blogs", () => {
+        const result = listHelper.favoriteBlog(blogs)
+        expect(result.likes).toBe(12)
+    })
+
+    test("with a list of one blog", () => {
+        const result = listHelper.favoriteBlog(listWithOneBlog)
+        expect(result.likes).toBe(5)
+    })
+
+    test("with an empty array", () => {
+        const result = listHelper.favoriteBlog(noBlogs)
+        expect(result.likes).toBe(undefined)
+    })
+})
+
