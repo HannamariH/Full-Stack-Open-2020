@@ -1,4 +1,60 @@
 const listHelper = require("../utils/list_helper")
+const mongoose = require("mongoose")
+const supertest = require("supertest")
+const app = require("../app")
+const blog = require("../models/blog")
+
+const api = supertest(app)
+
+const initialBlogs = [
+  {
+    title: "Vauvablogi",
+    author: "Veera",
+    url: "www.vauvablogi.fi",
+    likes: 5
+  },
+  {
+    title: "Ruokablogi",
+    author: "Reijo",
+    url: "www.ruokablogi.fi",
+    likes: 3
+  }
+]
+
+beforeEach(async () => {
+  await blog.deleteMany({})
+
+  let blogObject = new blog(initialBlogs[0])
+  await blogObject.save()
+
+  blogObject = new blog(initialBlogs[1])
+  await blogObject.save()
+})
+
+test("blogs are returned as json", async () => {
+  await api
+    .get("/api/blogs")
+    .expect(200)
+    .expect("Content-Type", /application\/json/)
+})
+
+test("all blogs are returned", async () => {
+  const response = await api.get("/api/blogs")
+
+  expect(response.body).toHaveLength(initialBlogs.length)
+})
+
+test("a specific blog is within the returned blogs", async () => {
+  const response = await api.get("/api/blogs")
+
+  const titles = response.body.map(r => r.title)
+
+  expect(titles).toContain("Vauvablogi")
+})
+
+afterAll(() => {
+  mongoose.connection.close()
+})
 
 test("dummy returns one", () => {
   const blogs = []
