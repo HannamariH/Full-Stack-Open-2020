@@ -64,6 +64,55 @@ test("a new blog is added", async () => {
   expect(authors).toContain("Matti")
 })
 
+//onko koodia muutettu oikeassa paikassa, että tämä menee läpi?
+test("likes will be 0", async () => {
+
+  const newBlog = {
+    title: "Matkablogi",
+    author: "Matti",
+    url: "www.matkablogi.fi"
+  }
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+
+  const response = await api.get("/api/blogs")
+
+  //testissä lisättävä blogi on listan kolmas
+  expect(response.body[2].likes).toBe(0)
+})
+
+//TODO
+test("title missing, 400 bad request", async () => {
+
+  const newBlog = {
+    author: "Matti",
+    url: "www.matkablogi.fi",
+    likes: 4
+  }  
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400)
+})
+
+//TODO
+test("url missing, 400 bad request", async () => {
+
+  const newBlog = {
+    title: "Matkablogi",
+    author: "Matti",
+    likes: 4
+  }
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400)
+})
+
 test("a specific blog is within the returned blogs", async () => {
   const response = await api.get("/api/blogs")
 
@@ -100,9 +149,9 @@ const listWithOneBlog = [
     },
   ]
 
-  const noBlogs = []
+const noBlogs = []
 
-  const blogs = [
+const blogs = [
     {
       _id: "5a422a851b54a676234d17f7",
       title: "React patterns",
@@ -154,7 +203,7 @@ const listWithOneBlog = [
       likes: 2,
       __v: 0,
     },
-  ]
+]
 
 describe("total likes", () => {
 
