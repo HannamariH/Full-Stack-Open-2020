@@ -44,6 +44,26 @@ test("all blogs are returned", async () => {
   expect(response.body).toHaveLength(initialBlogs.length)
 })
 
+test("a new blog is added", async () => {
+
+  const newBlog = {
+    title: "Matkablogi",
+    author: "Matti",
+    url: "www.matkablogi.fi",
+    likes: 7
+  }
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+
+  const response = await api.get("/api/blogs")
+  const authors = response.body.map(r => r.author)
+
+  expect(response.body).toHaveLength(initialBlogs.length + 1)
+  expect(authors).toContain("Matti")
+})
+
 test("a specific blog is within the returned blogs", async () => {
   const response = await api.get("/api/blogs")
 
@@ -54,7 +74,6 @@ test("a specific blog is within the returned blogs", async () => {
 
 test("field id is included", async () => {
   const response = await api.get("/api/blogs")
-  console.log(response)
   expect(response.body[0].id).toBeDefined()
 })
 
