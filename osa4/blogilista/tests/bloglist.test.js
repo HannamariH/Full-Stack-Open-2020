@@ -64,7 +64,6 @@ test("a new blog is added", async () => {
   expect(authors).toContain("Matti")
 })
 
-//onko koodia muutettu oikeassa paikassa, että tämä menee läpi?
 test("likes will be 0", async () => {
 
   const newBlog = {
