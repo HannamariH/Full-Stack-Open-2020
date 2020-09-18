@@ -82,7 +82,6 @@ test("likes will be 0", async () => {
   expect(response.body[2].likes).toBe(0)
 })
 
-//TODO
 test("title missing, 400 bad request", async () => {
 
   const newBlog = {
@@ -97,7 +96,6 @@ test("title missing, 400 bad request", async () => {
     .expect(400)
 })
 
-//TODO
 test("url missing, 400 bad request", async () => {
 
   const newBlog = {
