@@ -1,8 +1,11 @@
 const listHelper = require("../utils/list_helper")
+const helper = require("./test_helper")
 const mongoose = require("mongoose")
 const supertest = require("supertest")
 const app = require("../app")
-const blog = require("../models/blog")
+const Blog = require("../models/blog")
+const bcrypt = require("bcrypt")
+const User = require("../models/user")
 
 const api = supertest(app)
 
@@ -21,14 +24,87 @@ const initialBlogs = [
   }
 ]
 
-beforeEach(async () => {
-  await blog.deleteMany({})
+const initialUsers = [
+  {
+    username: "kake",
+    name: "Kalle",
+    password: "salasana"
+  },
+  {
+    username: "pepe",
+    name: "Pekka",
+    password: "password"
+  }
+]
 
-  let blogObject = new blog(initialBlogs[0])
+/*beforeEach(async () => {
+  await Blog.deleteMany({})
+  await User.deleteMany({})
+
+  let blogObject = new Blog(initialBlogs[0])
   await blogObject.save()
 
-  blogObject = new blog(initialBlogs[1])
+  blogObject = new Blog(initialBlogs[1])
   await blogObject.save()
+
+  let userObject = new User(initialUsers[0])
+  await userObject.save()
+
+  userObject = new User(initialUsers[1])
+  await userObject.save()
+})*/
+
+describe('when there is initially one user in db', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', passwordHash })
+
+    await user.save()
+  })
+
+  test('creation succeeds with a fresh username', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'kaisa',
+      name: 'Kaisa Kellokoski',
+      password: 'salainen',
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+
+    const usernames = usersAtEnd.map(u => u.username)
+    expect(usernames).toContain(newUser.username)
+  })
+
+  test('no user with existing username is added', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'root',
+      name: 'Root Roottinen',
+      password: 'sdfgh',
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+
+  })
 })
 
 test("blogs are returned as json", async () => {

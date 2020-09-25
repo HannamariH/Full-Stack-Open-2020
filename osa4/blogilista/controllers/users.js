@@ -2,7 +2,6 @@ const bcrypt = require("bcrypt")
 const usersRouter = require("express").Router()
 const User = require("../models/user")
 
-//toimiiko??
 usersRouter.get('/', (request, response) => {
     User
       .find({})
@@ -13,6 +12,10 @@ usersRouter.get('/', (request, response) => {
 
 usersRouter.post("/", async (request, response) => {
     const body = request.body
+
+    if (body.password === undefined || body.password.length < 3) {
+      return response.status(400).json({error: "password missing or too short"})
+    }
 
     const saltRounds = 10
     const passwordHash = await bcrypt.hash(body.password, saltRounds)
