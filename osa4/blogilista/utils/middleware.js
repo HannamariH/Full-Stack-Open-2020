@@ -1,5 +1,15 @@
 const logger = require('./logger')
 
+const tokenExtractor = (request, response, next) => {
+    const authorization = request.get("authorization")
+    if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
+      request.token = authorization.substring(7)
+    } else {
+      request.token = null
+    }
+    next()
+}
+
 const errorHandler = (error, request, response, next) => {
     logger.error(error.message)
   
@@ -21,5 +31,6 @@ const errorHandler = (error, request, response, next) => {
   }
 
   module.exports = {
-    errorHandler
+    errorHandler,
+    tokenExtractor
   }
