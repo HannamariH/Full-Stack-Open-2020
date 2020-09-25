@@ -95,17 +95,111 @@ describe('when there is initially one user in db', () => {
       password: 'sdfgh',
     }
 
-    await api
+    const result = await api
       .post('/api/users')
       .send(newUser)
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
+      expect(result.body.error).toContain("`username` to be unique")
+
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
 
   })
+
+  test('user with no username is not added', async () => {
+    const usersAtStart = await helper.usersInDb()
+  
+    const newUser = {
+      name: 'Root Roottinen',
+      password: 'sdfgh',
+    }
+  
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  
+      expect(result.body.error).toContain("`username` is required")
+  
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  
+  })
+
+  test('user with no password is not added', async () => {
+    const usersAtStart = await helper.usersInDb()
+  
+    const newUser = {
+      username: "kille",
+      name: 'Root Roottinen'
+    }
+  
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  
+      expect(result.body.error).toContain("password missing or too short")
+  
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  
+  })
+  
+  test('user with too short password is not added', async () => {
+    const usersAtStart = await helper.usersInDb()
+  
+    const newUser = {
+      username: 'dfhgjkj',
+      name: 'Root Roottinen',
+      password: 'sd',
+    }
+  
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  
+      expect(result.body.error).toContain("password missing or too short")
+  
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  
+  })
+
+  test('user with too short username is not added', async () => {
+    const usersAtStart = await helper.usersInDb()
+  
+    const username = "df" 
+
+    const newUser = {
+      username: username,
+      name: 'Root Roottinen',
+      password: 'sdjgh',
+    }
+  
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  
+      expect(result.body.error).toContain(`(\`${username}\`) is shorter than the minimum allowed length`)
+  
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  
+  })
 })
+
+
+
+
 
 test("blogs are returned as json", async () => {
   await api
