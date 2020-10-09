@@ -208,12 +208,14 @@ test("blogs are returned as json", async () => {
     .expect("Content-Type", /application\/json/)
 })
 
+//TODO: korjaa
 test("all blogs are returned", async () => {
   const response = await api.get("/api/blogs")
 
   expect(response.body).toHaveLength(initialBlogs.length)
 })
 
+//TODO: korjaa
 test("a new blog is added", async () => {
 
   const newBlog = {
@@ -234,6 +236,7 @@ test("a new blog is added", async () => {
   expect(authors).toContain("Matti")
 })
 
+//TODO: korjaa
 test("likes will be 0", async () => {
 
   const newBlog = {
@@ -252,6 +255,7 @@ test("likes will be 0", async () => {
   expect(response.body[2].likes).toBe(0)
 })
 
+//TODO: korjaa
 test("title missing, 400 bad request", async () => {
 
   const newBlog = {
@@ -266,6 +270,7 @@ test("title missing, 400 bad request", async () => {
     .expect(400)
 })
 
+//TODO: korjaa
 test("url missing, 400 bad request", async () => {
 
   const newBlog = {
@@ -280,6 +285,7 @@ test("url missing, 400 bad request", async () => {
     .expect(400)
 })
 
+//TODO: korjaa
 test("a specific blog is within the returned blogs", async () => {
   const response = await api.get("/api/blogs")
 
@@ -287,6 +293,9 @@ test("a specific blog is within the returned blogs", async () => {
 
   expect(titles).toContain("Vauvablogi")
 })
+
+//TODO
+test("no blog is added and 402 is returned if there is no token with the post request")
 
 test("field id is included", async () => {
   const response = await api.get("/api/blogs")
