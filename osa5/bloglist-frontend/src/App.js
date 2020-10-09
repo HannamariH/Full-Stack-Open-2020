@@ -11,6 +11,8 @@ const App = () => {
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
+  const [notification, setNotification] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -37,8 +39,15 @@ const App = () => {
       setUser(user)
       setUsername("")
       setPassword("")
+      setNotification(`login succeeded!`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     } catch (exception) {
-      console.log("pieleen meni")
+      setErrorMessage("wrong username or password")
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
     }
   }
 
@@ -60,14 +69,22 @@ const App = () => {
       setAuthor("")
       setUrl("")
       setBlogs(blogs.concat(blog))
+      setNotification(`a new blog ${blog.title} by ${blog.author} added!`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     } catch (exception) {
         console.log(exception)
+        setErrorMessage("could not add blog")
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
     }
   }
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
-      <h2>log in to application</h2>
+      <h2 className="login">log in to application</h2>
       <div>
         username
         <input
@@ -133,6 +150,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={notification} error={errorMessage} />
       {user === null ? (
         loginForm()
       ) : (
@@ -149,6 +167,20 @@ const App = () => {
       )}
   </div>  
   )
+}
+
+const Notification = ({ message, error }) => {
+  if (message === null && error == null) {
+    return null
+  }
+
+  if (message !== null) {
+    return <div className="message">{message}</div>
+  }
+
+  if (error !== null) {
+    return <div className="error">{error}</div>
+  }
 }
 
 export default App
