@@ -124,7 +124,7 @@ const App = () => {
           <br></br>
           <br></br>
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} buttonLabel="view"/>
           ))}
         </div>
       )}
