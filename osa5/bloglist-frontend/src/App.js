@@ -15,7 +15,8 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    blogService.getAll()
+      .then((blogs) => setBlogs(blogs))
   }, [])
 
   useEffect(() => {
@@ -62,13 +63,35 @@ const App = () => {
       blogService.setToken(user.token)
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
-      setNotification(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added!`)
+      setNotification(
+        `a new blog ${returnedBlog.title} by ${returnedBlog.author} added!`
+      )
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     } catch (exception) {
       console.log(exception)
       setErrorMessage("could not add blog")
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+  const handleLike = async (blogObject) => {
+    try {
+      blogService.setToken(user.token)
+      const returnedBlog = await blogService.update(blogObject)
+      setBlogs(
+        blogs.map((blog) => (blog.id === returnedBlog.id ? returnedBlog : blog))
+      )
+      setNotification(`blog ${returnedBlog.title} liked!`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    } catch (exception) {
+      console.log(exception)
+      setErrorMessage("could not update blog likes")
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -102,7 +125,7 @@ const App = () => {
 
   const blogForm = () => (
     <Togglable buttonLabel="new blog" ref={blogFormRef}>
-      <BlogForm handleCreate={handleCreate}/>
+      <BlogForm handleCreate={handleCreate} />
     </Togglable>
   )
 
@@ -124,7 +147,12 @@ const App = () => {
           <br></br>
           <br></br>
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} buttonLabel="view"/>
+            <Blog
+              key={blog.id}
+              blog={blog}
+              buttonLabel="view"
+              handleLike={handleLike}
+            />
           ))}
         </div>
       )}

@@ -1,5 +1,7 @@
 import React, { useState } from "react"
-const Blog = ({ blog, buttonLabel }) => {
+import blogService from "../services/blogs"
+
+const Blog = ({ blog, buttonLabel, handleLike }) => {
   const [showAll, setShowAll] = useState(false)
 
   const blogStyle = {
@@ -17,6 +19,12 @@ const Blog = ({ blog, buttonLabel }) => {
     setShowAll(!showAll)
   }
 
+  const addLike = (event) => {
+    event.preventDefault()
+    console.log(blog)
+    handleLike({...blog, likes: blog.likes+1})
+  }
+
   return (
     <div style={blogStyle}>
       <div style={hideWhenAll}>
@@ -24,9 +32,9 @@ const Blog = ({ blog, buttonLabel }) => {
         <button onClick={toggleShowAll}>{buttonLabel}</button>
       </div>
       <div style={showWhenAll}>
-        {blog.title} <button onClick={toggleShowAll}>hide</button> <br/>
-        {blog.url} <br/>
-        {blog.likes} <button>like</button> <br/>
+        {blog.title} <button onClick={toggleShowAll}>hide</button> <br />
+        {blog.url} <br />
+        {blog.likes} <button onClick={addLike}>like</button> <br />
         {blog.author}
       </div>
     </div>
