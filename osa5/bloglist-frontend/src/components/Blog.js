@@ -21,7 +21,6 @@ const Blog = ({ blog, buttonLabel, handleLike }) => {
 
   const addLike = (event) => {
     event.preventDefault()
-    console.log(blog)
     handleLike({...blog, likes: blog.likes+1})
   }
 

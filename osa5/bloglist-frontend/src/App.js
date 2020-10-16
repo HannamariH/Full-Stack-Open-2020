@@ -14,6 +14,8 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const blogFormRef = useRef()
 
+  const sortedBlogsAscending = [...blogs].sort((a, b) => a.likes - b.likes).reverse()
+
   useEffect(() => {
     blogService.getAll()
       .then((blogs) => setBlogs(blogs))
@@ -146,7 +148,7 @@ const App = () => {
           {blogForm()}
           <br></br>
           <br></br>
-          {blogs.map((blog) => (
+          {sortedBlogsAscending.map((blog) => (
             <Blog
               key={blog.id}
               blog={blog}
