@@ -14,11 +14,12 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const blogFormRef = useRef()
 
-  const sortedBlogsAscending = [...blogs].sort((a, b) => a.likes - b.likes).reverse()
+  const sortedBlogsAscending = [...blogs]
+    .sort((a, b) => a.likes - b.likes)
+    .reverse()
 
   useEffect(() => {
-    blogService.getAll()
-      .then((blogs) => setBlogs(blogs))
+    blogService.getAll().then((blogs) => setBlogs(blogs))
   }, [])
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      console.log(user)
     }
   }, [])
 
@@ -100,6 +102,26 @@ const App = () => {
     }
   }
 
+  const handleDelete = async (blogObject) => {
+    try {
+      const confirm = window.confirm(
+        `Do you really want to remove blog ${blogObject.title} by ${blogObject.author}?`
+      )
+      if (confirm) {
+        blogService.setToken(user.token)
+        const returned = await blogService.remove(blogObject)
+        console.log(returned)
+        setBlogs(blogs.filter((blog) => blog.id !== blogObject.id))
+      }
+    } catch (exception) {
+      console.log(exception)
+      setErrorMessage("could not remove blog")
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <h2 className="login">log in to application</h2>
@@ -154,6 +176,8 @@ const App = () => {
               blog={blog}
               buttonLabel="view"
               handleLike={handleLike}
+              handleDelete={handleDelete}
+              user={user}
             />
           ))}
         </div>

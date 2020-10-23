@@ -1,8 +1,17 @@
-import React, { useState } from "react"
-import blogService from "../services/blogs"
+import React, { useState, useEffect } from "react"
 
-const Blog = ({ blog, buttonLabel, handleLike }) => {
+const Blog = ({ blog, buttonLabel, handleLike, handleDelete, user }) => {
   const [showAll, setShowAll] = useState(false)
+  const [showRemove, setShowRemove] = useState(false)
+
+  //poistonappi näytetään vain blogin tekijälle
+  try {
+    if (blog.user.username === user.username) {
+      setShowRemove(true)
+    }
+  } catch (error) { //kaikilla blogeilla ei ole tekijää
+    console.log(error)
+  }
 
   const blogStyle = {
     paddingTop: 10,
@@ -11,6 +20,8 @@ const Blog = ({ blog, buttonLabel, handleLike }) => {
     borderWidth: 1,
     marginBottom: 5,
   }
+
+  const showWhenAdder = { display: showRemove ? "" : "none" }
 
   const hideWhenAll = { display: showAll ? "none" : "" }
   const showWhenAll = { display: showAll ? "" : "none" }
@@ -21,7 +32,12 @@ const Blog = ({ blog, buttonLabel, handleLike }) => {
 
   const addLike = (event) => {
     event.preventDefault()
-    handleLike({...blog, likes: blog.likes+1})
+    handleLike({ ...blog, likes: blog.likes + 1 })
+  }
+
+  const removeBlog = (event) => {
+    event.preventDefault()
+    handleDelete(blog)
   }
 
   return (
@@ -34,7 +50,10 @@ const Blog = ({ blog, buttonLabel, handleLike }) => {
         {blog.title} <button onClick={toggleShowAll}>hide</button> <br />
         {blog.url} <br />
         {blog.likes} <button onClick={addLike}>like</button> <br />
-        {blog.author}
+        {blog.author} <br />
+        <button style={showWhenAdder} onClick={removeBlog}>
+          remove blog
+        </button>
       </div>
     </div>
   )
