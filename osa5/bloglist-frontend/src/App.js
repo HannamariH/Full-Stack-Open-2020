@@ -110,7 +110,6 @@ const App = () => {
       if (confirm) {
         blogService.setToken(user.token)
         const returned = await blogService.remove(blogObject)
-        console.log(returned)
         setBlogs(blogs.filter((blog) => blog.id !== blogObject.id))
       }
     } catch (exception) {

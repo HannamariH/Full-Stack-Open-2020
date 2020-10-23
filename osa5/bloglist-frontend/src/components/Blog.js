@@ -10,7 +10,7 @@ const Blog = ({ blog, buttonLabel, handleLike, handleDelete, user }) => {
       setShowRemove(true)
     }
   } catch (error) { //kaikilla blogeilla ei ole tekijää
-    console.log(error)
+    console.log("error")
   }
 
   const blogStyle = {
