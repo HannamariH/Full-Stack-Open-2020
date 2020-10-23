@@ -44,7 +44,7 @@ const App = () => {
       setUser(user)
       setUsername("")
       setPassword("")
-      setNotification(`login succeeded!`)
+      setNotification("login succeeded!")
       setTimeout(() => {
         setNotification(null)
       }, 5000)
@@ -109,7 +109,7 @@ const App = () => {
       )
       if (confirm) {
         blogService.setToken(user.token)
-        const returned = await blogService.remove(blogObject)
+        await blogService.remove(blogObject)
         setBlogs(blogs.filter((blog) => blog.id !== blogObject.id))
       }
     } catch (exception) {
@@ -186,7 +186,7 @@ const App = () => {
 }
 
 const Notification = ({ message, error }) => {
-  if (message === null && error == null) {
+  if (message === null && error === null) {
     return null
   }
 
