@@ -1,9 +1,12 @@
 import React from "react"
 import "@testing-library/jest-dom/extend-expect"
-import { render } from "@testing-library/react"
+import { render, fireEvent } from "@testing-library/react"
 import Blog from "./Blog"
 
-test("only title and author are rendered" , () => {
+describe("Blog tests: ", () => {
+
+    let component
+
     const blog= {
         title: "Christmas blog",
         author: "Maija",
@@ -11,13 +14,28 @@ test("only title and author are rendered" , () => {
         likes: 5
     }
 
-    const component = render(
-        <Blog blog={blog} />
-    )
+    beforeEach(() => {
+        component = render(
+            <Blog blog={blog} buttonLabel="view"/>
+        )
+    })
 
-    const div = component.container.querySelector(".hiddenFirst")
+    test("only title and author are rendered" , () => {
+    
+        const div = component.container.querySelector(".hiddenFirst")
+    
+        expect(component.container).toHaveTextContent("Christmas blog")
+        expect(component.container).toHaveTextContent("Maija")
+        expect(div).toHaveStyle("display: none")
+    })
+    
+    test("after clicking view button also url and likes are shown", () => {
+        const button = component.getByText("view")
+        fireEvent.click(button)
 
-    expect(component.container).toHaveTextContent("Christmas blog")
-    expect(component.container).toHaveTextContent("Maija")
-    expect(div).toHaveStyle("display: none")
+        const div = component.container.querySelector(".hiddenFirst")
+        expect(div).not.toHaveStyle("display: none")
+    })
+
 })
+
