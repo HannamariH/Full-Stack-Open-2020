@@ -46,7 +46,7 @@ const Blog = ({ blog, buttonLabel, handleLike, handleDelete, user }) => {
         {blog.title} {blog.author}
         <button onClick={toggleShowAll}>{buttonLabel}</button>
       </div>
-      <div style={showWhenAll}>
+      <div className="hiddenFirst" style={showWhenAll}>
         {blog.title} <button onClick={toggleShowAll}>hide</button> <br />
         {blog.url} <br />
         {blog.likes} <button onClick={addLike}>like</button> <br />
