@@ -43,7 +43,20 @@ describe("Blog app", function () {
       cy.get("#author").type("Maija")
       cy.get("#url").type("testiblogi.fi")
       cy.get("#create-blog").click()
-      cy.contains("testiblogi")
+      cy.contains("testiblogi Maija")
     })
+
+    it("A blog can be liked", function () {
+      cy.contains("new blog").click()
+      cy.get("#title").type("testiblogi")
+      cy.get("#author").type("Maija")
+      cy.get("#url").type("testiblogi.fi")
+      cy.get("#create-blog").click()
+      cy.contains("view").click()
+      cy.contains("0")
+      cy.contains("like").click()
+      cy.contains("1")
+    })
+
   })
 })
