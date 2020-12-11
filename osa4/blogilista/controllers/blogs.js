@@ -8,7 +8,7 @@ blogsRouter.get('/', async (request, response) => {
       .find({})
       .populate("user", { username: 1, name: 1})
 
-      response.json(blogs.map((u) => u.toJSON()))
+    response.json(blogs.map((u) => u.toJSON()))
 })
 
 blogsRouter.post('/', async (request, response, next) => {

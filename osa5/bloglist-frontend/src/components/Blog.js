@@ -2,16 +2,8 @@ import React, { useState } from "react"
 
 const Blog = ({ blog, buttonLabel, handleLike, handleDelete, user }) => {
   const [showAll, setShowAll] = useState(false)
-  const [showRemove, setShowRemove] = useState(false)
-
-  //poistonappi näytetään vain blogin tekijälle
-  try {
-    if (blog.user.username === user.username) {
-      setShowRemove(true)
-    }
-  } catch (error) { //kaikilla blogeilla ei ole tekijää
-    console.log(error)
-  }
+  //const [showRemove, setShowRemove] = useState(false)
+  const [showRemove, setShowRemove] = useState(blog.user.username === user.username ? true : false)
 
   const blogStyle = {
     paddingTop: 10,
@@ -23,11 +15,19 @@ const Blog = ({ blog, buttonLabel, handleLike, handleDelete, user }) => {
 
   const showWhenAdder = { display: showRemove ? "" : "none" }
 
+  const showRemoveButton = () => {
+    if (blog.user.username !== user.username) {
+      return
+    }
+    setShowRemove(true)
+  }
+
   const hideWhenAll = { display: showAll ? "none" : "" }
   const showWhenAll = { display: showAll ? "" : "none" }
 
   const toggleShowAll = () => {
     setShowAll(!showAll)
+    showRemoveButton()
   }
 
   const addLike = (event) => {

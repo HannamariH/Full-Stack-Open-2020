@@ -17,11 +17,6 @@ const asObject = (anecdote) => {
   }
 }
 
-//6.6: anekdootit, step4
-//Jos et jo sitä tehnyt, eriytä action-olioiden luominen action creator -funktioihin ja
-//sijoita ne tiedostoon src/reducers/anecdoteReducer.js. Eli toimi samalla tavalla kuin
-//materiaali esimerkissä kohdasta action creator alkaen on toimittu.
-
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {

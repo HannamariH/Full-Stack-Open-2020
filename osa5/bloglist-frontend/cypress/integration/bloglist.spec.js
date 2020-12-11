@@ -30,7 +30,7 @@ describe("Blog app", function () {
     })
   })
 
-  describe.only("When logged in", function () {
+  describe("When logged in", function () {
     beforeEach(function () {
       cy.get("input:first").type("maija")
       cy.get("input:last").type("salasana")
@@ -56,6 +56,18 @@ describe("Blog app", function () {
       cy.contains("0")
       cy.contains("like").click()
       cy.contains("1")
+    })
+
+    it.only("A user who added a blog can also delete it", function () {
+      cy.contains("new blog").click()
+      cy.get("#title").type("testiblogi")
+      cy.get("#author").type("Maija")
+      cy.get("#url").type("testiblogi.fi")
+      cy.get("#create-blog").click()
+      cy.contains("testiblogi Maija")
+      cy.contains("view").click()
+      cy.contains("remove blog") //.click()
+      //cy.get("html").should("not.contain", "testiblogi")
     })
 
   })
