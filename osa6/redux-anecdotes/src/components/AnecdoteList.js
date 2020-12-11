@@ -6,8 +6,11 @@ import { changeNotification } from "../reducers/notificationReducer"
 const AnecdoteList = () => {
   const dispatch = useDispatch()
   const anecdotes = useSelector(state => state.anecdotes)
+  const filter = useSelector(state => state.filter)
 
-  const sortedAnecdotes = [...anecdotes]
+  const filteredAnecdotes = filter !== null ? anecdotes.filter((a) => a.content.toUpperCase().includes(filter.toUpperCase())) : anecdotes
+
+  const sortedAnecdotes = [...filteredAnecdotes]
     .sort((a, b) => a.votes - b.votes)
     .reverse()
 

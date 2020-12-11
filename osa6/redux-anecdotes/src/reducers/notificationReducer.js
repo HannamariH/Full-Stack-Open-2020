@@ -1,5 +1,3 @@
-const notificationAtStart = "my first notification"
-
 const notificationReducer = (state = null, action) => {
   switch (action.type) {
       case 'NOTIFICATION':
