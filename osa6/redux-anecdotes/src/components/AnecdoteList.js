@@ -14,6 +14,8 @@ const AnecdoteList = () => {
     .sort((a, b) => a.votes - b.votes)
     .reverse()
 
+  console.log(sortedAnecdotes)  
+
   const vote = (anecdote) => {
     dispatch(addVote(anecdote.id))
     const notification = `You voted ${anecdote.content}`
