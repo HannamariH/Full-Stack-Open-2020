@@ -30,7 +30,7 @@ const anecdoteReducer = (state = [], action) => {
       }
       return state.map((a) => (a.id !== id ? a : votedAnecdote))
     case "NEW_ANECDOTE":
-      return [...state, action.data]
+      return [...state, action.anecdote]
     case "INIT_ANECDOTES":
       return action.data
     default:
