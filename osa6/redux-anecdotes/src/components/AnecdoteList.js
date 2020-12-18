@@ -15,7 +15,7 @@ const AnecdoteList = () => {
     .reverse()
 
   const vote = (anecdote) => {
-    dispatch(addVote(anecdote.id))
+    dispatch(addVote(anecdote))
     const notification = `You voted ${anecdote.content}`
     dispatch(changeNotification(notification))
     setTimeout(() => {      

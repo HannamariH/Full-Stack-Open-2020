@@ -5,7 +5,7 @@ export const getId = () => (100000 * Math.random()).toFixed(0)
 const anecdoteReducer = (state = [], action) => {
   switch (action.type) {
     case "VOTE":
-      const id = action.id
+      const id = action.anecdote.id
       const anecdoteToVote = state.find((a) => a.id === id)
       const votedAnecdote = {
         ...anecdoteToVote,
@@ -21,17 +21,24 @@ const anecdoteReducer = (state = [], action) => {
   }
 }
 
-export const addVote = (id) => {
-  return {
-    type: "VOTE",
-    id: id
+//addVote tarvitsee koko anekdootin, jotta voi lähettää sen putille
+export const addVote = (anecdote) => {
+  return async dispatch => {
+    const votedAnecdote = await anecdoteService.putVote(anecdote)
+    dispatch({
+      type: "VOTE",
+      anecdote: votedAnecdote
+    })    
   }
 }
 
 export const createAnecdote = (anecdote) => {
-  return {
-    type: "NEW_ANECDOTE",
-    anecdote
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createNew(anecdote)
+    dispatch({
+      type: "NEW_ANECDOTE",
+      anecdote: newAnecdote
+    })  
   }
 }
 
